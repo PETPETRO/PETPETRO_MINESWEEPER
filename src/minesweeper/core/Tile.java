@@ -35,6 +35,12 @@ public abstract class Tile {
 		this.state = state;
 	}
 
+	/**
+	 * Returns string that represents state of current tile, "- " if CLOSED "M "
+	 * if MARKED.
+	 * 
+	 * @return string that represents state of current tile
+	 */
 	@Override
 	public String toString() {
 		if (this.state == State.MARKED) {

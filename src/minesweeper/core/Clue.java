@@ -17,10 +17,21 @@ public class Clue extends Tile {
 		this.value = value;
 	}
 
+	/**
+	 * Returns current value of this clue.
+	 * 
+	 * @return current value of this clue
+	 */
 	public int getValue() {
 		return value;
 	}
 
+	/**
+	 * Returns string that represents state of current clue, number of adjacent
+	 * mines if OPEN
+	 * 
+	 * @return string that represents state of current clue
+	 */
 	@Override
 	public String toString() {
 		if (this.getState() == State.OPEN) {

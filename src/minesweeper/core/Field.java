@@ -2,6 +2,8 @@ package minesweeper.core;
 
 import java.util.Random;
 
+import com.sun.xml.internal.bind.annotation.OverrideAnnotationOf;
+
 import minesweeper.core.Tile.State;
 
 /**
@@ -51,11 +53,10 @@ public class Field {
 
 		// generate the field content
 		generate();
-		//System.out.println();
 	}
 
 	/**
-	 * Opens tile at specified indeces.
+	 * Opens tile at specified indexes.
 	 *
 	 * @param row
 	 *            row number
@@ -71,24 +72,21 @@ public class Field {
 				return;
 			}
 
-//			if (isSolved()) {
-//				state = GameState.SOLVED;
-//				return;
-//			}
+			// if (isSolved()) {
+			// state = GameState.SOLVED;
+			// return;
+			// }
 		}
 	}
 
 	/**
-	 * Marks tile at specified indeces.
+	 * Marks tile at specified indexes.
 	 *
 	 * @param row
 	 *            row number
 	 * @param column
 	 *            column number
 	 */
-
-	
-
 	public void markTile(int row, int column) {
 		Tile tile = getTile(row, column);
 		if (tile.getState() == State.CLOSED) {
@@ -111,8 +109,6 @@ public class Field {
 				c--;
 			}
 		}
-		
-		
 
 		for (int r = 0; r < rowCount; r++) {
 			for (int c = 0; c < columnCount; c++) {
@@ -162,36 +158,68 @@ public class Field {
 		return count;
 	}
 
+	/**
+	 * Returns count of rows of current field.
+	 * 
+	 * @return count of rows of current field
+	 */
 	public int getRowCount() {
 		return rowCount;
 	}
 
+	/**
+	 * Returns count of columns of current field.
+	 * 
+	 * @return count of columns of current field
+	 */
 	public int getColumnCount() {
 		return columnCount;
 	}
 
+	/**
+	 * Returns count of mines in field.
+	 * 
+	 * @return count of mines in field
+	 */
 	public int getMineCount() {
 		return mineCount;
 	}
 
+	/**
+	 * Returns current state of game (PLAYING, FAILED, SOLVED).
+	 * 
+	 * @return current state of game
+	 */
 	public GameState getState() {
 		return state;
 	}
 
-
-
+	/**
+	 * Returns tile in current row and column.
+	 * 
+	 * @param row
+	 *            row number
+	 * @param column
+	 *            column number
+	 * @return tile in current row and column
+	 */
 	private Tile getTile(int row, int column) {
 		return tiles[row][column];
 	}
-	
+
+	/**
+	 * Returns string that represents field of tiles.
+	 * 
+	 * @return string that represents field of tiles
+	 */
 	@Override
 	public String toString() {
-		String s="";
-		for(int row= 0; row<rowCount;row++){
-			for(int column=0; column<columnCount; column++){
-					s+=tiles[row][column].toString();
+		String s = "";
+		for (int row = 0; row < rowCount; row++) {
+			for (int column = 0; column < columnCount; column++) {
+				s += tiles[row][column].toString();
 			}
-			s+="\n";
+			s += "\n";
 		}
 		return s;
 	}
