@@ -16,8 +16,10 @@ public class Minesweeper {
     private Minesweeper() {
         userInterface = new ConsoleUI();
         
-        Field field = new Field(9, 9, 10);
-        userInterface.newGameStarted(field);
+        Field field = new Field(10, 10, 10);
+        //userInterface.newGameStarted(field);
+        field.openTile(1,4);
+        System.out.println(field);
     }
 
     /**
@@ -25,6 +27,9 @@ public class Minesweeper {
      * @param args arguments
      */
     public static void main(String[] args) {
+    	
         new Minesweeper();
+        
+        
     }
 }
