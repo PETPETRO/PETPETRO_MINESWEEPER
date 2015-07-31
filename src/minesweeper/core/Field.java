@@ -53,6 +53,10 @@ public class Field {
 
 		// generate the field content
 		generate();
+<<<<<<< HEAD
+		// System.out.println();
+=======
+>>>>>>> origin/master
 	}
 
 	/**
@@ -87,6 +91,10 @@ public class Field {
 	 * @param column
 	 *            column number
 	 */
+<<<<<<< HEAD
+
+=======
+>>>>>>> origin/master
 	public void markTile(int row, int column) {
 		Tile tile = getTile(row, column);
 		if (tile.getState() == State.CLOSED) {
@@ -126,7 +134,7 @@ public class Field {
 	 * @return true if game is solved, false otherwise
 	 */
 	private boolean isSolved() {
-		throw new UnsupportedOperationException("Method isSolved not yet implemented");
+		return ((rowCount * columnCount) - getNumberOf(State.OPEN) == getMineCount());
 	}
 
 	/**
@@ -194,6 +202,16 @@ public class Field {
 		return state;
 	}
 
+<<<<<<< HEAD
+	public Tile getTile(int row, int column) {
+		return tiles[row][column];
+	}
+
+	@Override
+	public String toString() {
+		String s = "";
+		// System.out.printf(format, args)
+=======
 	/**
 	 * Returns tile in current row and column.
 	 * 
@@ -215,13 +233,29 @@ public class Field {
 	@Override
 	public String toString() {
 		String s = "";
+>>>>>>> origin/master
 		for (int row = 0; row < rowCount; row++) {
 			for (int column = 0; column < columnCount; column++) {
 				s += tiles[row][column].toString();
 			}
+<<<<<<< HEAD
+			// s+="\n";
+=======
 			s += "\n";
+>>>>>>> origin/master
 		}
 		return s;
+	}
+
+	private int getNumberOf(Tile.State state) {
+		int numberOf = 0;
+		for (int row = 0; row < rowCount; row++) {
+			for (int column = 0; column < columnCount; column++) {
+				if (state == getTile(row, column).getState())
+					numberOf++;
+			}
+		}
+		return numberOf;
 	}
 
 }
