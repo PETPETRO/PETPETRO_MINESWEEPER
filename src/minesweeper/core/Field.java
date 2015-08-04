@@ -2,8 +2,6 @@ package minesweeper.core;
 
 import java.util.Random;
 
-import com.sun.xml.internal.bind.annotation.OverrideAnnotationOf;
-
 import minesweeper.core.Tile.State;
 
 /**
@@ -50,13 +48,7 @@ public class Field {
 		this.columnCount = columnCount;
 		this.mineCount = mineCount;
 		tiles = new Tile[rowCount][columnCount];
-
-		// generate the field content
 		generate();
-<<<<<<< HEAD
-		// System.out.println();
-=======
->>>>>>> origin/master
 	}
 
 	/**
@@ -76,10 +68,14 @@ public class Field {
 				return;
 			}
 
-			// if (isSolved()) {
-			// state = GameState.SOLVED;
-			// return;
-			// }
+			if (isSolved()) {
+				state = GameState.SOLVED;
+				return;
+			}
+
+			if (tile instanceof Clue && ((Clue) tile).getValue() == 0) {
+				openAdjacentTiles(row, column);
+			}
 		}
 	}
 
@@ -91,10 +87,7 @@ public class Field {
 	 * @param column
 	 *            column number
 	 */
-<<<<<<< HEAD
 
-=======
->>>>>>> origin/master
 	public void markTile(int row, int column) {
 		Tile tile = getTile(row, column);
 		if (tile.getState() == State.CLOSED) {
@@ -202,16 +195,6 @@ public class Field {
 		return state;
 	}
 
-<<<<<<< HEAD
-	public Tile getTile(int row, int column) {
-		return tiles[row][column];
-	}
-
-	@Override
-	public String toString() {
-		String s = "";
-		// System.out.printf(format, args)
-=======
 	/**
 	 * Returns tile in current row and column.
 	 * 
@@ -221,7 +204,7 @@ public class Field {
 	 *            column number
 	 * @return tile in current row and column
 	 */
-	private Tile getTile(int row, int column) {
+	public Tile getTile(int row, int column) {
 		return tiles[row][column];
 	}
 
@@ -232,17 +215,17 @@ public class Field {
 	 */
 	@Override
 	public String toString() {
+
 		String s = "";
->>>>>>> origin/master
 		for (int row = 0; row < rowCount; row++) {
 			for (int column = 0; column < columnCount; column++) {
 				s += tiles[row][column].toString();
 			}
-<<<<<<< HEAD
+
 			// s+="\n";
-=======
+
 			s += "\n";
->>>>>>> origin/master
+
 		}
 		return s;
 	}
@@ -257,5 +240,80 @@ public class Field {
 		}
 		return numberOf;
 	}
+
+	public void openAdjacentTiles(int row, int column) {
+		for (int rowOffset = -1; rowOffset <= 1; rowOffset++) {
+			int actRow = row + rowOffset;
+			if (actRow >= 0 && actRow < rowCount) {
+				for (int columnOffset = -1; columnOffset <= 1; columnOffset++) {
+					int actColumn = column + columnOffset;
+					if (actColumn >= 0 && actColumn < columnCount) {
+						openTile(actRow, actColumn);
+					}
+				}
+			}
+		}
+	}
+
+	// public void openAdjacentTiles(int row, int column){
+	// if(row==0 ){
+	// if(column==0){
+	// openTile(row+1, column);
+	// openTile(row+1, column+1);
+	// openTile(row, column+1);
+	// }else if(column==columnCount-1){
+	// openTile(row+1, column);
+	// openTile(row, column-1);
+	// openTile(row+1, column-1);
+	// }else{
+	// openTile(row+1, column);
+	// openTile(row+1, column+1);
+	// openTile(row+1, column-1);
+	// openTile(row, column+1);
+	// openTile(row, column-1);
+	// }
+	// }else if(row==rowCount-1){
+	// if(column==0){
+	// openTile(row-1, column);
+	// openTile(row-1, column+1);
+	// openTile(row, column+1);
+	// }else if(column==columnCount-1){
+	// openTile(row-1, column);
+	// openTile(row, column-1);
+	// openTile(row-1, column-1);
+	// }else{
+	// openTile(row-1, column);
+	// openTile(row-1, column+1);
+	// openTile(row-1, column-1);
+	// openTile(row, column+1);
+	// openTile(row, column-1);
+	// }
+	// }else{
+	// if(column==0){
+	// openTile(row+1, column+1);
+	// openTile(row, column+1);
+	// openTile(row-1, column+1);
+	// openTile(row+1, column);
+	// openTile(row-1, column);
+	// }
+	// else if(column==columnCount-1){
+	// openTile(row+1, column-1);
+	// openTile(row, column-1);
+	// openTile(row-1, column-1);
+	// openTile(row+1, column);
+	// openTile(row-1, column);
+	// }
+	// else{
+	// openTile(row+1, column+1);
+	// openTile(row, column+1);
+	// openTile(row-1, column+1);
+	// openTile(row+1, column-1);
+	// openTile(row, column-1);
+	// openTile(row-1, column-1);
+	// openTile(row+1, column);
+	// openTile(row-1, column);
+	// }
+	// }
+	// }
 
 }
