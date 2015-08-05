@@ -73,7 +73,7 @@ public class Field {
 				return;
 			}
 
-			if (tile instanceof Clue && ((Clue) tile).getValue() == 0) {
+			if (((Clue) tile).getValue() == 0) {
 				openAdjacentTiles(row, column);
 			}
 		}
@@ -158,6 +158,12 @@ public class Field {
 
 		return count;
 	}
+	
+	
+	public int getRemainingMineCount(){
+		return mineCount - getNumberOf(State.MARKED);
+	}
+	
 
 	/**
 	 * Returns count of rows of current field.

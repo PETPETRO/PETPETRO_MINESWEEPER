@@ -3,9 +3,11 @@ package minesweeper.consoleui;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Formatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import minesweeper.Minesweeper;
 import minesweeper.UserInterface;
 import minesweeper.core.Field;
 import minesweeper.core.GameState;
@@ -48,6 +50,7 @@ public class ConsoleUI implements UserInterface {
 			processInput();
 		} while (field.getState() == GameState.PLAYING);
 		if (field.getState() == GameState.SOLVED) {
+			openField();
 			update();
 			System.err.println("VYHRAL SI");
 		} else if (field.getState() == GameState.FAILED) {
@@ -76,23 +79,29 @@ public class ConsoleUI implements UserInterface {
 		int rowCount = field.getRowCount();
 		int columnCount = field.getColumnCount();
 		char pismeno = 'A';
+		StringBuilder builder = new StringBuilder();
+		Formatter formatter = new Formatter(builder);
 
 		int x = Integer.toString(field.getColumnCount()).length();
 		int y = 2;
-		// vypis oznacenia stlpcov (0,1,2,....)
-		System.out.print(" ");
+		formatter.format(" ");
 		for (int a = 0; a < columnCount; a++) {
-			System.out.printf("%" + x + "s", a);
+			formatter.format("%" + (x + 1) + "s", a);
 		}
-		System.out.printf("\n");
-
+		formatter.format("%n");
 		for (int row = 0; row < rowCount; row++) {
-			System.out.printf("%" + y + "s", pismeno++);
+			formatter.format("%" + y + "s", pismeno++);
 			for (int column = 0; column < columnCount; column++) {
-				System.out.printf("%" + x + "s", field.getTile(row, column));
+				formatter.format("%" + (x + 1) + "s", field.getTile(row, column));
 			}
-			System.out.print("\n");
+			formatter.format("%n");
 		}
+		System.out.print(builder);
+		formatter.close();
+		System.out.println(
+				"\nX – ukoncenie hry \nMA1 – oznacenie dlaždice v riadku A a stlpci 1\nOB4 – odkrytie dlaždice v riadku B a stlpci 4");
+		System.out.println("Pocet neoznacenych min je: " + field.getRemainingMineCount());
+		System.out.println(Minesweeper.getInstance().getPlayingSeconds());
 	}
 
 	/**
@@ -100,11 +109,18 @@ public class ConsoleUI implements UserInterface {
 	 * playing field according to input string.
 	 */
 	private void processInput() {
-		System.out.println(
-				"X – ukoncenie hry \nMA1 – oznacenie dlaždice v riadku A a stlpci 1\nOB4 – odkrytie dlaždice v riadku B a stlpci 4");
 		String input = readLine();
+		try {
+			handleInput(input);
+		} catch (WrongFormatException ex) {
+			ex.getMessage();
+			System.err.println(ex);
+		}
+	}
+
+	void handleInput(String input) throws WrongFormatException {
 		input = input.toUpperCase();
-		Pattern p = Pattern.compile("([OM])([A-Z])([0-9])");
+		Pattern p = Pattern.compile("([OM])([A-Z])([0-9]+)");
 		Matcher m = p.matcher(input);
 		if (m.matches()) {
 			if (m.group(1).charAt(0) == 'O' && m.group(2).charAt(0) - 'A' <= field.getRowCount()
@@ -118,14 +134,14 @@ public class ConsoleUI implements UserInterface {
 				int column = Integer.parseInt(m.group(3));
 				field.markTile(row, column);
 			} else {
-				System.err.println("Nespravny vstup");
+				throw new WrongFormatException("Nespravny vstup");
 			}
-		} else if (input.charAt(0) == 'X' && input.length() == 1) {
+		} else if (input.length() == 1 && input.charAt(0) == 'X') {
 			System.err.println("Ukoncil si hru");
 			System.exit(0);
 		} else {
-			System.err.println("Nespravny vstup");
+			throw new WrongFormatException("Nespravny vstup");
 		}
-
 	}
+
 }
