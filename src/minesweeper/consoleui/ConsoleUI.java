@@ -134,7 +134,7 @@ public class ConsoleUI implements UserInterface {
 				int column = Integer.parseInt(m.group(3));
 				field.markTile(row, column);
 			} else {
-				throw new WrongFormatException("Nespravny vstup");
+				throw new WrongFormatException("Hodnota je mimo rozsahu pola");
 			}
 		} else if (input.length() == 1 && input.charAt(0) == 'X') {
 			System.err.println("Ukoncil si hru");

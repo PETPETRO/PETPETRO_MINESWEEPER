@@ -2,6 +2,7 @@ package minesweeper.tests;
 
 import static org.junit.Assert.*;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import minesweeper.core.*;
@@ -10,10 +11,15 @@ public class FieldTest {
 	static final int ROWS = 9;
 	static final int COLUMNS = 9;
 	static final int MINES = 10;
+	static Field field;
+
+	@Before
+	public void setUp() {
+		field = new Field(ROWS, COLUMNS, MINES);
+	}
 
 	@Test
 	public void isSolved() {
-		Field field = new Field(ROWS, COLUMNS, MINES);
 
 		assertEquals(GameState.PLAYING, field.getState());
 
