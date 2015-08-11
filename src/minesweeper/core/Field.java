@@ -44,11 +44,25 @@ public class Field {
 	 *            mine count
 	 */
 	public Field(int rowCount, int columnCount, int mineCount) {
+
+		if (rowCount < 0) {
+			System.err.println("Pocet riadkov nemoze byt mensi ako nula!");
+			System.exit(0);
+
+		} else if (columnCount < 0) {
+			System.err.println("Pocet stpcov nemoze byt mensi ako nula!");
+			System.exit(0);
+		} else if (mineCount > rowCount * columnCount || mineCount < 0) {
+			System.err.println("Pocet min musi byt vacsi ako nula a mensi alebo rovny poctu dlazdic!");
+			System.exit(0);
+		}
+
 		this.rowCount = rowCount;
 		this.columnCount = columnCount;
 		this.mineCount = mineCount;
 		tiles = new Tile[rowCount][columnCount];
 		generate();
+
 	}
 
 	/**
@@ -73,7 +87,7 @@ public class Field {
 				return;
 			}
 
-			if (tile instanceof Clue && ((Clue) tile).getValue() == 0) {
+			if (((Clue) tile).getValue() == 0) {
 				openAdjacentTiles(row, column);
 			}
 		}
@@ -101,6 +115,7 @@ public class Field {
 	 * Generates playing field.
 	 */
 	private void generate() {
+
 		for (int c = 0; c < mineCount; c++) {
 			int row = new Random().nextInt(rowCount);
 			int column = new Random().nextInt(columnCount);
@@ -119,6 +134,7 @@ public class Field {
 			}
 
 		}
+
 	}
 
 	/**
@@ -157,6 +173,10 @@ public class Field {
 		}
 
 		return count;
+	}
+
+	public int getRemainingMineCount() {
+		return mineCount - getNumberOf(State.MARKED);
 	}
 
 	/**
