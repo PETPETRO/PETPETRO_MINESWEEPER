@@ -6,9 +6,7 @@ public interface UserInterface {
 
 	/**
 	 * Starts the game.
-	 * 
-	 * @param field
-	 *            field of mines and clues
+	 * @param field field of mines and clues
 	 */
 	void newGameStarted(Field field);
 
