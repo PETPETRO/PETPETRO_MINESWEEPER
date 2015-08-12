@@ -72,6 +72,9 @@ public class Settings implements Serializable {
 			return BEGINNER;
 		}
 		ObjectInputStream object = new ObjectInputStream(input);
-		return (Settings) object.readObject();
+		Object set = object.readObject();
+		object.close();
+		return (Settings) set;
+
 	}
 }

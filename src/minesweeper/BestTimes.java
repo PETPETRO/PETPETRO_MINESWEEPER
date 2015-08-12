@@ -1,16 +1,29 @@
 package minesweeper;
 
+import java.lang.reflect.Method;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+
+import com.sun.org.apache.bcel.internal.generic.Select;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * Player times.
  */
 public class BestTimes implements Iterable<BestTimes.PlayerTime> {
 	/** List of best player times. */
-	private List<PlayerTime> playerTimes = new ArrayList<PlayerTime>();
+	private static List<PlayerTime> playerTimes = new ArrayList<PlayerTime>();
 
 	/**
 	 * Returns an iterator over a set of best times.
@@ -30,9 +43,11 @@ public class BestTimes implements Iterable<BestTimes.PlayerTime> {
 	 *            player time in seconds
 	 */
 	public void addPlayerTime(String name, int time) {
-		PlayerTime player = new PlayerTime(name, time);
-		playerTimes.add(player);
-		Collections.sort(playerTimes);
+		// PlayerTime player = new PlayerTime(name, time);
+		BestTimes.PlayerTime p = new BestTimes.PlayerTime(name, time);
+		// playerTimes.add(player);
+		p.insertToDB(p);
+		// Collections.sort(playerTimes);
 	}
 
 	/**
@@ -40,8 +55,10 @@ public class BestTimes implements Iterable<BestTimes.PlayerTime> {
 	 * 
 	 * @return a string representation of the object
 	 */
+	@Override
 	public String toString() {
-
+		BestTimes.PlayerTime player = new BestTimes.PlayerTime(null, 0);
+		player.selectFromDB();
 		String playList = "";
 		Iterator<PlayerTime> iterator = iterator();
 		while (iterator.hasNext()) {
@@ -84,6 +101,44 @@ public class BestTimes implements Iterable<BestTimes.PlayerTime> {
 			return time;
 		}
 
+		private void insertToDB(PlayerTime playerTime) {
+			try (Connection connection = DriverManager.getConnection(DatabaseSetting.URL, DatabaseSetting.USER,
+					DatabaseSetting.PASSWORD);
+					PreparedStatement pstm = connection.prepareStatement(DatabaseSetting.QUERY_ADD_BEST_TIME);) {
+
+				try (Statement stm = connection.createStatement();) {
+					stm.executeUpdate(DatabaseSetting.QUERY_CREATE_BEST_TIMES);
+				} catch (Exception e) {
+					// do not propagate exception, table may already exist
+				}
+
+				pstm.setString(1, playerTime.getName());
+				pstm.setInt(2, playerTime.getTime());
+				pstm.execute();
+
+			} catch (Exception e) {
+				System.out.println("Exception occured during saving high score to database: " + e.getMessage());
+			}
+
+		}
+
+		private void selectFromDB() {
+			try (Connection connection = DriverManager.getConnection(DatabaseSetting.URL, DatabaseSetting.USER,
+					DatabaseSetting.PASSWORD);
+					Statement stm = connection.createStatement();
+					ResultSet rs = stm.executeQuery(DatabaseSetting.QUERY_SELECT_BEST_TIMES);) {
+				playerTimes.clear();
+				while (rs.next()) {
+					PlayerTime pt = new PlayerTime(rs.getString(1), rs.getInt(2));
+					playerTimes.add(pt);
+				}
+				Collections.sort(playerTimes);
+
+			} catch (Exception e) {
+				System.out.println("Exception occured during loading high score to database: " + e.getMessage());
+			}
+		}
+
 		@Override
 		public int compareTo(PlayerTime o) throws NullPointerException {
 
@@ -100,5 +155,6 @@ public class BestTimes implements Iterable<BestTimes.PlayerTime> {
 			}
 
 		}
+
 	}
 }
