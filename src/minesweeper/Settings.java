@@ -1,9 +1,12 @@
 package minesweeper;
 
-import java.io.*;
-import java.lang.Object;
-
-import minesweeper.core.Field;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 public class Settings implements Serializable {
 
@@ -40,9 +43,9 @@ public class Settings implements Serializable {
 
 	@Override
 	public boolean equals(Object o) {
-		if (o instanceof Field && ((Field) o).getRowCount() == this.getRowCount()
-				&& ((Field) o).getColumnCount() == this.getColumnCount()
-				&& ((Field) o).getMineCount() == this.getMineCount()) {
+		if (((Settings) o).getRowCount() == this.getRowCount()
+				&& ((Settings) o).getColumnCount() == this.getColumnCount()
+				&& ((Settings) o).getMineCount() == this.getMineCount()) {
 			return true;
 		} else
 			return false;
